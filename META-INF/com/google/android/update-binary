@@ -14,9 +14,9 @@
 #
 # Originally Coded by corsicanu@XDAdevelopers
 
-DEV=$(getprop ro.boot.bootloader)
-if [ ! $DEV ] ; then
-    DEV=$1
+device=$(cat /proc/cmdline | sed 's/ /\n/g' | grep "androidboot.bootloader")
+if [ ! $device ] ; then
+    device=$1
 fi
 
 if [[ $2 = 0 ]]; then
@@ -31,7 +31,7 @@ ui_print() {
         echo -n -e "ui_print\n" > $OUTFD
 }
 
-if echo $DEV | grep '[GN]97[03567][BFN]'; then
+if echo $device | grep '[GN]97[03567][BFN]'; then
     ui_print " "
     ui_print "Bootlogo Patcher"
     ui_print " by corsicanu@xdadevelopers "
