@@ -34,15 +34,17 @@ if echo $device | grep '[GN]97[03567][BFN]'; then
     unzip -o "$ZIP"
 	chmod -R 755 /tmp/hades/*
 	cd /tmp/hades
+    bb=/tmp/hades/busybox
+	up_param=$($bb find /dev/block/platform -iname up_param)
 
     if [ ! -e /sdcard/up_param/up_param.bin ]; then
         ui_print " - backing up current up_param to internal storage"
-        dd if=/dev/block/platform/13d60000.ufs/by-name/up_param of=/sdcard/up_param/up_param.bin bs=4096
+        dd if=$up_param of=/sdcard/up_param/up_param.bin bs=4096
     fi
 
     ui_print " - unpacking bootlogo"
     cd up_param
-    /tmp/hades/tar -xf /dev/block/platform/13d60000.ufs/by-name/up_param
+    /tmp/hades/tar -xf $up_param
 
     ui_print " - patching the warnings"
     cp -r logo.jpg svb_orange.jpg
@@ -53,7 +55,7 @@ if echo $device | grep '[GN]97[03567][BFN]'; then
     /tmp/hades/tar -pcvf ../new_param.tar *
 
     ui_print " - flashing new bootlogo"
-    cat ../new_param.tar > /dev/block/platform/13d60000.ufs/by-name/up_param
+    cat ../new_param.tar > $up_param
 
     ui_print " - cleaning up"
     cd /tmp && rm -rf /tmp/hades
