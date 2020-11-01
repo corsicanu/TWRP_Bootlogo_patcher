@@ -1,0 +1,77 @@
+## bootlogo warnings patcher script license:
+    Copyright 2020 © corsicanu
+    bootlogo warnings patcher script is licensed under Creative Commons 
+    Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
+    Full license is available at:
+        https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+        
+    This is a human-readable summary (and not a substitute) of the license.
+    
+    You are free to:
+        *Share — copy and redistribute the material in any medium or format
+        *Adapt — remix, transform, and build upon the material
+        The licensor cannot revoke these freedoms as long as you follow the license terms.
+    
+    Under the following terms:
+        *Attribution — You must give appropriate credit, provide a link to the license,
+        and indicate if changes were made. You may do so in any reasonable manner,
+        but not in any way that suggests the licensor endorses you or your use.
+        
+        *NonCommercial — You may not use the material for commercial purposes.
+        
+        *ShareAlike — If you remix, transform, or build upon the material, you must
+        distribute your contributions under the same license as the original.
+
+        No additional restrictions — You may not apply legal terms or technological
+        measures that legally restrict others from doing anything the license permits.
+        
+    Notices:
+    You do not have to comply with the license for elements of the material in the public
+    domain or where your use is permitted by an applicable exception or limitation.
+    No warranties are given. The license may not give you all of the permissions necessary
+    for your intended use. For example, other rights such as publicity, privacy, or moral
+    rights may limit how you use the material.
+
+
+## Included Binary Licenses:
+
+busybox: GPLv2
+
+    BusyBox is distributed under version 2 of the General Public
+    License. Version 2 is the only version of this license which this
+    version of BusyBox (or modified versions derived from this one) may
+    be distributed under.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    Per Section 3(b), osm0sis (self-)compiled binary from modified source:
+    https://git.busybox.net/busybox/
+    https://github.com/osm0sis/android-busybox-ndk
+    (pre-patched source tree used to build available upon request)
+
+    If you consider your name should be here, don't hesitate and send me
+    an email: me <at> corsicanu <dot> ro.    
+
+tar: GPLv3+
+
+    Tar is free software; you can redistribute it and/or modify it under the terms
+    of the GNU General Public License as published by the Free Software Foundation,
+    either version 3 of the License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    If you consider your name should be here, don't hesitate and send me
+    an email: me <at> corsicanu <dot> ro.    
