@@ -1,18 +1,7 @@
 #!/sbin/sh
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# Originally Coded by corsicanu@XDAdevelopers
+# Copyright 2020 © corsicanu
+# Licensed under CC BY-NC-SA 4.0
+# https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
 device=$(cat /proc/cmdline | sed 's/ /\n/g' | grep "androidboot.bootloader")
 if [ ! $device ] ; then
@@ -33,7 +22,7 @@ ui_print() {
 
 if echo $device | grep '[GN]97[03567][BFN]'; then
     ui_print " "
-    ui_print "Bootlogo Patcher"
+    ui_print "Bootlogo Warnings Patcher"
     ui_print " by corsicanu@xdadevelopers "
     ui_print " "
 
@@ -41,9 +30,10 @@ if echo $device | grep '[GN]97[03567][BFN]'; then
     # Cleanup
     cd /tmp
     rm -rf hades
-    mkdir -p hades/up_param /sdcard/up_param && cd hades
+    mkdir -p hades/up_param /sdcard/up_param
     unzip -o "$ZIP"
-    chmod 755 tar
+	chmod -R 755 /tmp/hades/*
+	cd /tmp/hades
 
     if [ ! -e /sdcard/up_param/up_param.bin ]; then
         ui_print " - backing up current up_param to internal storage"
