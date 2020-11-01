@@ -1,0 +1,80 @@
+#!/sbin/sh
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Originally Coded by corsicanu@XDAdevelopers
+
+DEV=$(getprop ro.boot.bootloader)
+if [ ! $DEV ] ; then
+    DEV=$1
+fi
+
+if [[ $2 = 0 ]]; then
+    OUTFD="/dev/null"
+else
+    OUTFD="/proc/self/fd/$2"
+fi
+ZIP=$3
+
+ui_print() {
+        echo -n -e "ui_print $1\n" > $OUTFD
+        echo -n -e "ui_print\n" > $OUTFD
+}
+
+if echo $DEV | grep '[GN]97[03567][BFN]'; then
+    ui_print " "
+    ui_print "Bootlogo Patcher"
+    ui_print " by corsicanu@xdadevelopers "
+    ui_print " "
+
+    ui_print " - prepairing tools"
+    # Cleanup
+    cd /tmp
+    rm -rf hades
+    mkdir -p hades/up_param /sdcard/up_param && cd hades
+    unzip -o "$ZIP"
+    chmod 755 tar
+
+    if [ ! -e /sdcard/up_param/up_param.bin ]; then
+        ui_print " - backing up current up_param to internal storage"
+        dd if=/dev/block/platform/13d60000.ufs/by-name/up_param of=/sdcard/up_param/up_param.bin bs=4096
+    fi
+
+    ui_print " - unpacking bootlogo"
+    cd up_param
+    /tmp/hades/tar -xf /dev/block/platform/13d60000.ufs/by-name/up_param
+
+    ui_print " - patching the warnings"
+    cp -r logo.jpg svb_orange.jpg
+    echo "" > booting_warning.jpg
+    chown root:root * && chmod 444 *.jpg && touch *
+
+    ui_print " - packing new bootlogo"
+    /tmp/hades/tar -pcvf ../new_param.tar *
+
+    ui_print " - flashing new bootlogo"
+    cat ../new_param.tar > /dev/block/platform/13d60000.ufs/by-name/up_param
+
+    ui_print " - cleaning up"
+    cd /tmp && rm -rf /tmp/hades
+
+    ui_print " "
+    ui_print "Done, reboot and enjoy!"
+    ui_print " "
+    sync
+else
+    ui_print " "
+    ui_print "!! Device is not supported, aborting..."
+    ui_print " "
+    exit 1
+fi
