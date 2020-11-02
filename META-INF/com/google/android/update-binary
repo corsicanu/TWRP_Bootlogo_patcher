@@ -1,5 +1,5 @@
 #!/sbin/sh
-# Copyright 2020 © corsicanu
+# Copyright 2020 Â© corsicanu
 # Licensed under CC BY-NC-SA 4.0
 # https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
@@ -24,7 +24,7 @@ ui_print() {
 # G970F G973F G975F G977B G970N G973N G975N G977N - G97[0357][BFN]
 # N970F N975F N976B N971N N976N N976Q -             N97[0156][FNQ]
 # A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN -    A[12345]05F
-if echo $device | grep '[AGN][123459][07][013567][BFNQ]'; then
+if echo $device | grep -E 'G97[0357][BFN]|N97[0156][FNQ]|A[12345]05F'; then
     ui_print " "
     ui_print "Bootlogo Warnings Patcher"
     ui_print " by corsicanu@xdadevelopers "
