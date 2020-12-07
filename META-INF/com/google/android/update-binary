@@ -27,6 +27,7 @@ ui_print() {
 if echo $device | grep -E 'G97[0357][BFN]|N97[0156][FNQ]|A[12345]05F'; then
     ui_print " "
     ui_print "Bootlogo Warnings Patcher"
+    ui_print "Version: custom"
     ui_print " by corsicanu@xdadevelopers "
     ui_print " "
 
