@@ -1,0 +1,52 @@
+name: Zip release
+
+on:
+  push:
+
+jobs:
+  update:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Create release zip
+        id: release
+        run: |
+          ver=`cat .version | cut -d'-' -f1`
+          sed -i "s/custom/v$ver - $(date +'%d-%m-%Y %H:%M')/g" META-INF/com/google/android/update-binary
+          zip -r TWRP_Bootlogo_patcher_v$ver.zip *
+          echo ::set-output name=version::$ver
+          echo ::set-output name=zip::`find -name TWRP_Bootlogo_patcher_v$ver.zip`
+
+      - name: Tag and increment the release
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git pull origin ${{github.ref}} --ff-only
+          echo "Changelog:" > log.txt
+          git log --format="%C(auto) %h %s" $(git describe --tags --abbrev=0)..HEAD >> log.txt
+          git tag v${{ steps.release.outputs.version }}
+          next=`echo ${{ steps.release.outputs.version }} + 0.1 | bc`-next
+          echo $next > .version
+          git add .version
+          git commit -m "version: start $next cicle"
+
+      - name: Push changes to repo
+        uses: ad-m/github-push-action@master
+        with:
+          tags: true
+          github_token: ${{ secrets.TOKEN }}
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          body_path: log.txt
+          tag_name: v${{ steps.release.outputs.version }}
+          files: |
+            ${{ steps.release.outputs.zip }}
