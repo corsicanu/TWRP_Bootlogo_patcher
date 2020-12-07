@@ -21,10 +21,12 @@ ui_print() {
 }
 
 # here i'll try to maintain a list of devices added as supported
-# G970F G973F G975F G977B G970N G973N G975N G977N - G97[0357][BFN]
-# N970F N975F N976B N971N N976N N976Q -             N97[0156][FNQ]
-# A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN -    A[12345]05F
-if echo $device | grep -E 'G97[0357][BFN]|N97[0156][FNQ]|A[12345]05F'; then
+# device                                            regex
+# G970F G973F G975F G977B G970N G973N G975N G977N   G97[0357][BFN]
+# N970F N975F N976B N971N N976N                     N97[0156][FN]
+# A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN      A[12345]05F
+# M215F                                             M215F
+if echo $device | grep -E 'G97[0357][BFN]|N97[0156][FNQ]|A[12345]05F|M215F'; then
     ui_print " "
     ui_print "Bootlogo Warnings Patcher"
     ui_print "Version: custom"
