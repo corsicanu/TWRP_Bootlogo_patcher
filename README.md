@@ -12,6 +12,7 @@ involved in this for your failures, you are the only one choosing to mess up wit
 All the files here are pulled from official firmwares of the devices mentioned.
 ```
 ### Supported devices
+   - Galaxy S20 Series - G980F G985F G981B G986B G988B
    - Galaxy S10 Series - G970F G973F G975F G977B G970N G973N G975N G977N
    - Galaxy Note 10 Series - N970F N975F N976B N971N N976N
    - Galaxy A\*0 Series - A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN
