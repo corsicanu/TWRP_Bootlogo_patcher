@@ -17,6 +17,7 @@ All the files here are pulled from official firmwares of the devices mentioned.
    - Galaxy Note 10 Series - N970F N975F N976B N971N N976N
    - Galaxy A\*0 Series - A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN
    - Galaxy M\*1 Series - M215F M315F
+   - Galaxy Tab A 10.1 (2019) - T510 T515
 
 ### Instructions:
    - Download TWRP_Bootlogo_patcher-*.zip from [releases](https://github.com/corsicanu/TWRP_Bootlogo_patcher/releases)
