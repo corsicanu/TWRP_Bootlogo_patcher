@@ -20,15 +20,21 @@ ui_print() {
         echo -n -e "ui_print\n" > $OUTFD
 }
 
-# here i'll try to maintain a list of devices added as supported
-# device                                            regex
-# G970F G973F G975F G977B G970N G973N G975N G977N   G97[0357][BFN]
-# N970F N975F N976B N971N N976N                     N97[0156][FN]
-# A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN      A[12345]05F
-# M215F M315F                                       M[23]15F
-# G980F G985F G981B G986B G988B                     G98[01568][BF]
-# T510 T515                                         T51[05]
-if echo $device | grep -E 'G97[0357][BFN]|N97[0156][FNQ]|A[12345]05F|M[23]15F|G98[01568][BF]|T51[05]'; then
+# Here is a list of supported devices, model numbers and regex to match
+#---------------------------+-----------------------------------------------------+-----------------+
+# Device                    |  Model Number(s)                                   |  Regex           |
+#---------------------------+----------------------------------------------------+------------------+
+# Galaxy S21 Series         |  G991B G996B G998B G991N G996N G998N               |  G99[168][BN]    |
+# Galaxy S20 Series         |  G980F G985F G981B G986B G988B                     |  G98[01568][BF]  |
+# Galaxy S10 Series         |  G970F G973F G975F G977B G970N G973N G975N G977N   |  G97[0357][BFN]  |
+# Galaxy Note 20 Series     |  N980F N981B N985F N986B                           |  N98[0156][BF]   |
+# Galaxy Note 10 Series     |  N970F N975F N976B N971N N976N                     |  N97[0156][FN]   |
+# Galaxy A*0 Series         |  A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN      |  A[12345]05F     |
+# Galaxy M*1 Series         |  M215F M315F                                       |  M[23]15F        |
+# Galaxy Tab A 10.1 (2019)  |  T510 T515                                         |  T51[05]         |
+#---------------------------+----------------------------------------------------+------------------+
+
+if echo $device | grep -E 'G99[168][BN]|G98[01568][BF]|G97[0357][BFN]|N98[0156][BF]|N97[0156][FN]|A[12345]05F|M[23]15F|T51[05]'; then
     ui_print " "
     ui_print "Bootlogo Warnings Patcher"
     ui_print "Version: custom"
