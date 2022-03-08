@@ -19,6 +19,8 @@ involved in this for your failures, you are the only one choosing to mess up wit
    - Galaxy A\*0 Series - A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN
    - Galaxy M\*1 Series - M215F M315F
    - Galaxy Tab A 10.1 (2019) - T510 T515
+   - Galaxy F62/M62 - E625F M625F
+   - Galaxy F41/M21s - F415F
 
 ### Instructions:
    - Download TWRP_Bootlogo_patcher-*.zip from [releases](https://github.com/corsicanu/TWRP_Bootlogo_patcher/releases)
