@@ -1,7 +1,7 @@
 # Bootlogo Warnings Patcher
 ### A simple tool to get rid of [annoying boot warnings](https://imgur.com/a/FFeOHkC) - exynos only
 ```
-Copyright 2020-2021 © corsicanu
+Copyright 2020-2022 © corsicanu
 Licensed under CC BY-NC-SA 4.0
 https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 ```
@@ -37,18 +37,18 @@ involved in this for your failures, you are the only one choosing to mess up wit
    - unpack tools and prepare folders
    - find up_param and param blocks and set them as variables
    - check up_param for [booting_warning.jpg](https://i.imgur.com/PMDv38E.jpeg)
-       - if booting_warning.jpg size is greater than 1byte then it means it's not patched
+       - if booting_warning.jpg exists and its size is different than 305 bytes then it means it's not patched
        - backup up_param to internal storage
        - copy normal splash logo over [svb_orange.jpg](https://i.imgur.com/bQ9wTeW.jpeg)
-       - echo "" (nothing) in booting_warning.jpg (which makes the size of the file 1byte)
+       - copy black 1px.jpg over booting_warning.jpg (which makes the size of the file 305 bytes)
        - repack up_param and flash back
    - check param for [booting_warning.jpg](https://i.imgur.com/PMDv38E.jpeg)
-       - if booting_warning.jpg size is greater than 1byte then it means it's not patched
+       - if booting_warning.jpg exists and its size is different than 305 bytes then it means it's not patched
        - backup param to internal storage
        - copy normal splash logo over [svb_orange.jpg](https://i.imgur.com/bQ9wTeW.jpeg)
-       - echo "" (nothing) in booting_warning.jpg (which makes the size of the file 1byte)
+       - copy black 1px.jpg over booting_warning.jpg (which makes the size of the file 305 bytes)
        - repack param and flash back
 
-With these phone now will show a "nothing" logo and then show a warning containing the normal splash logo, which will make it look as normal and unrooted/locked bootloader. 
+After these phone will show the logo, a warning containing the normal splash logo and a normal logo with 1px black warning overlay, which will make it look as normal and unrooted/locked bootloader. 
 
 Yes, the warnings are not disabled, more like hidden, the phone will take same time as before to pass the splash screen but at least you won't have the hazard triangle which looks like it's soon going to explode (inb4 Note7, we will miss you).
