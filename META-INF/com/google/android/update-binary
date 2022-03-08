@@ -56,7 +56,7 @@ if echo $device | grep -E 'G99[168][BN]|G98[01568][BF]|G97[0357][BFN]|N98[0156][
 
     ui_print " - unpacking up_param"
     cd /tmp/hades/up_param && $tr -xf $up_param 
-    if [ $($bb stat -c%s "booting_warning.jpg") -gt 1 ]; then
+    if [ -e "booting_warning.jpg" ] && [[ $($bb stat -c%s "booting_warning.jpg") != 305 ]]; then
         if [ ! -e /sdcard/bootlogo_backup/up_param.bin ]; then
             ui_print " - backing up stock up_param to internal storage"
             mkdir -p /sdcard/bootlogo_backup
@@ -65,7 +65,7 @@ if echo $device | grep -E 'G99[168][BN]|G98[01568][BF]|G97[0357][BFN]|N98[0156][
         
         ui_print " - patching warnings"
         cp -r logo.jpg svb_orange.jpg
-        echo "" > booting_warning.jpg
+        cp -r /tmp/hades/1px.jpg booting_warning.jpg
         chown root:root * && chmod 444 *.jpg && touch *
         
         ui_print " - packing new bootlogo"
@@ -80,7 +80,7 @@ if echo $device | grep -E 'G99[168][BN]|G98[01568][BF]|G97[0357][BFN]|N98[0156][
     
     ui_print " - unpacking param"
     cd /tmp/hades/param && $tr -xf $param 
-    if [ $($bb stat -c%s "booting_warning.jpg") -gt 1 ]; then
+    if [ -e "booting_warning.jpg" ] && [[ $($bb stat -c%s "booting_warning.jpg") != 305 ]]; then
         if [ ! -e /sdcard/bootlogo_backup/param.bin ]; then
             ui_print " - backing up stock param to internal storage"
             mkdir -p /sdcard/bootlogo_backup
@@ -89,7 +89,7 @@ if echo $device | grep -E 'G99[168][BN]|G98[01568][BF]|G97[0357][BFN]|N98[0156][
         
         ui_print " - patching warnings"
         cp -r logo.jpg svb_orange.jpg
-        echo "" > booting_warning.jpg
+        cp -r /tmp/hades/1px.jpg booting_warning.jpg
         chown root:root * && chmod 444 *.jpg && touch *
         
         ui_print " - packing new bootlogo"
