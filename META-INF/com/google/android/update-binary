@@ -24,6 +24,7 @@ ui_print() {
 #---------------------------+----------------------------------------------------+------------------+
 # Device                    |  Model Number(s)                                   |  Regex           |
 #---------------------------+----------------------------------------------------+------------------+
+# Galaxy S22 Series         |  S901B S906B S908B                                 |  S90[168]B       |
 # Galaxy S21 Series         |  G991B G996B G998B G991N G996N G998N               |  G99[168][BN]    |
 # Galaxy S20 Series         |  G980F G985F G981B G986B G988B                     |  G98[01568][BF]  |
 # Galaxy S10 Series         |  G970F G973F G975F G977B G970N G973N G975N G977N   |  G97[0357][BFN]  |
@@ -34,9 +35,10 @@ ui_print() {
 # Galaxy Tab A 10.1 (2019)  |  T510 T515                                         |  T51[05]         |
 # Galaxy F62/M62            |  E625F M625F                                       |  [EM]625F        |
 # Galaxy F41/M21s           |  F415F                                             |  F415F           |
+# Galaxy A13                |  A135F A136B                                       |  A13[56][BF]     |
 #---------------------------+----------------------------------------------------+------------------+
 
-if echo $device | grep -E 'G99[168][BN]|G98[01568][BF]|G97[0357][BFN]|N98[0156][BF]|N97[0156][BFN]|A[12345]05F|M[23]15F|T51[05]|[EM]625F|F415F'; then
+if echo $device | grep -E 'G99[168][BN]|G98[01568][BF]|G97[0357][BFN]|N98[0156][BF]|N97[0156][BFN]|A[12345]05F|M[23]15F|T51[05]|[EM]625F|F415F|S90[168]B|A13[56][BF]'; then
     ui_print " "
     ui_print "Bootlogo Warnings Patcher"
     ui_print "Version: custom"

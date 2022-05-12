@@ -11,6 +11,7 @@ I am not responsable for anything you do with your device, don't blame me or any
 involved in this for your failures, you are the only one choosing to mess up with your device. 
 ```
 ### Supported devices
+   - Galaxy S22 Series - S901B S906B S908B
    - Galaxy S21 Series - G991B G996B G998B G991N G996N G998N
    - Galaxy S20 Series - G980F G985F G981B G986B G988B
    - Galaxy S10 Series - G970F G973F G975F G977B G970N G973N G975N G977N
@@ -21,6 +22,7 @@ involved in this for your failures, you are the only one choosing to mess up wit
    - Galaxy Tab A 10.1 (2019) - T510 T515
    - Galaxy F62/M62 - E625F M625F
    - Galaxy F41/M21s - F415F
+   - Galaxy A13 - A135F A136B
 
 ### Instructions:
    - Download TWRP_Bootlogo_patcher-*.zip from [releases](https://github.com/corsicanu/TWRP_Bootlogo_patcher/releases)
