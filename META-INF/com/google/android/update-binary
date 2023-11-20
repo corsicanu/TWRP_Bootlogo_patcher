@@ -1,114 +1,119 @@
 #!/sbin/sh
-# Copyright 2020-2024 © corsicanu
+# Copyright 2017-2024 © corsicanu
 # Licensed under CC BY-NC-SA 4.0
 # https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 
-device=$(cat /proc/cmdline | sed 's/ /\n/g' | grep "androidboot.bootloader")
-if [ ! $device ] ; then
-    device=$1
-fi
+set -e
 
-if [[ $2 = 0 ]]; then
-    OUTFD="/dev/null"
-else
-    OUTFD="/proc/self/fd/$2"
-fi
 ZIP=$3
+OUTFD="/proc/self/fd/$2"
+DEBUG_LOG="/tmp/bootloader.log"
 
 ui_print() {
-        echo -n -e "ui_print $1\n" > $OUTFD
-        echo -n -e "ui_print\n" > $OUTFD
+    echo -n -e "ui_print $1\n" > "$OUTFD"
+    echo -n -e "ui_print\n" > "$OUTFD"
 }
 
-# Here is a list of regex to match of supported devices, along with model numbers
-if echo "$device" | grep -E '
-    S90[168]B|           # Galaxy S22 Series         |  S901B S906B S908B
-    G99[168][BN]|        # Galaxy S21 Series         |  G991B G996B G998B G991N G996N G998N
-    G[79]8[01568][BF]|   # Galaxy S20 Series         |  G980F G985F G981B G986B G988B G780F
-    G97[0357][BFN]|      # Galaxy S10 Series         |  G970F G973F G975F G977B G970N G973N G975N G977N
-    N98[0156][BF]|       # Galaxy Note 20 Series     |  N980F N981B N985F N986B
-    N97[0156][BFN]|      # Galaxy Note 10 Series     |  N970F N975F N976B N971N N976N
-    A[12345]05F|         # Galaxy A*0 Series         |  A105F/FN A205F/FN A305F/FN A405F/FN A505F/FN
-    M[23]15F|            # Galaxy M*1 Series         |  M215F M315F
-    T51[05]|             # Galaxy Tab A 10.1 (2019)  |  T510 T515
-    [EM]625F|            # Galaxy F62/M62            |  E625F M625F
-    F415F|               # Galaxy F41/M21s           |  F415F
-    A13[56][BF]          # Galaxy A13                |  A135F A136B
-'; then
+debug_log() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" >> "$DEBUG_LOG"
+}
+
+check_supported_device() {
+    cmdline=$(cat /proc/cmdline | sed 's/ /\n/g')
+    debug_log "Debug: cmdline - $cmdline"
+
+    if echo "$cmdline" | grep -E 'exynos|universal'; then
+        debug_log "Debug: Device is supported by board"
+        return 0
+    elif echo "$cmdline" | grep -E 'G99[168][BN]|G[79]8[01568][BF]|G97[0357][BFN]|N98[0156][BF]|N97[0156][BFN]|A[12345]05F|M[23]15F|T51[05]|[EM]625F|F415F|S90[168]B|A13[56][BF]'; then
+        debug_log "Debug: Device is supported by regex match in device list)"
+        return 0
+    else
+        ui_print " "
+        ui_print "!! Device is not supported, aborting..."
+        ui_print " "
+        debug_log "Debug: Device is not supported, aborting..."
+        exit 1
+    fi
+}
+
+prepare_tools() {
+    cd /tmp
+    rm -rf hades bootloader.log
+    mkdir -p hades/up_param hades/param
+    unzip -o "$ZIP"
+    chmod -R 755 /tmp/hades/*
+    cd /tmp/hades
+    bb=/tmp/hades/busybox
+    tr=/tmp/hades/tar
+}
+
+process_bootlogo() {
+    local target_dir=$1
+    local backup_file=$2
+
+    ui_print " - unpacking $target_dir"
+    cd "/tmp/hades/$target_dir" && $tr -xf "$($bb find /dev/block/platform -iname $target_dir)"
+
+    debug_log "Debug: Unpacked $target_dir"
+
+    if [ -e "booting_warning.jpg" ] && [[ $($bb stat -c%s "booting_warning.jpg") != 305 ]]; then
+        if [ ! -e "/sdcard/bootlogo_backup/$backup_file" ]; then
+            ui_print " - backing up stock $target_dir to internal storage"
+            mkdir -p "/sdcard/bootlogo_backup"
+            dd if="$($bb find /dev/block/platform -iname $target_dir)" of="/sdcard/bootlogo_backup/$backup_file" bs=4096
+        fi
+
+        ui_print " - patching warnings"
+        cp -r logo.jpg svb_orange.jpg
+        cp -r /tmp/hades/1px.jpg booting_warning.jpg
+        chown root:root * && chmod 444 *.jpg && touch *
+
+        ui_print " - packing new bootlogo"
+        $tr -pcvf "../new_$target_dir.tar" *
+
+        ui_print " - flashing new bootlogo"
+        cat "../new_$target_dir.tar" > "$($bb find /dev/block/platform -iname $target_dir)"
+
+        debug_log "Debug: Patched and flashed new $target_dir bootlogo"
+    else
+        ui_print " - no warning found, skipping $target_dir.."
+        debug_log "Debug: No warning found, skipping $target_dir"
+    fi
+}
+
+main() {
+    debug_log "Debug: Script started"
+
     ui_print " "
     ui_print "Bootlogo Warnings Patcher"
     ui_print "Version: custom"
-    ui_print " by corsicanu@xdadevelopers "
+    ui_print " by corsicanu@xdaforums "
     ui_print " "
 
     ui_print " - prepairing tools"
-    # Cleanup
-    cd /tmp
-    rm -rf hades
-    mkdir -p hades/up_param hades/param
-    unzip -o "$ZIP"
-	chmod -R 755 /tmp/hades/*
-	cd /tmp/hades
-    bb=/tmp/hades/busybox
-    tr=/tmp/hades/tar
-	up_param=$($bb find /dev/block/platform -iname up_param)
-	param=$($bb find /dev/block/platform -iname param)
+    prepare_tools
+    sleep 0.5
 
-    ui_print " - unpacking up_param"
-    cd /tmp/hades/up_param && $tr -xf $up_param 
-    if [ -e "booting_warning.jpg" ] && [[ $($bb stat -c%s "booting_warning.jpg") != 305 ]]; then
-        if [ ! -e /sdcard/bootlogo_backup/up_param.bin ]; then
-            ui_print " - backing up stock up_param to internal storage"
-            mkdir -p /sdcard/bootlogo_backup
-            dd if=$up_param of=/sdcard/bootlogo_backup/up_param.bin bs=4096
-        fi
-        
-        ui_print " - patching warnings"
-        cp -r logo.jpg svb_orange.jpg
-        cp -r /tmp/hades/1px.jpg booting_warning.jpg
-        chown root:root * && chmod 444 *.jpg && touch *
-        
-        ui_print " - packing new bootlogo"
-        $tr -pcvf ../new_up_param.tar *
-        
-        ui_print " - flashing new bootlogo"
-        cat ../new_up_param.tar > $up_param
-        
-    else
-        ui_print " - no warning found, skipping up_param.."
-    fi
-    
-    ui_print " - unpacking param"
-    cd /tmp/hades/param && $tr -xf $param 
-    if [ -e "booting_warning.jpg" ] && [[ $($bb stat -c%s "booting_warning.jpg") != 305 ]]; then
-        if [ ! -e /sdcard/bootlogo_backup/param.bin ]; then
-            ui_print " - backing up stock param to internal storage"
-            mkdir -p /sdcard/bootlogo_backup
-            dd if=$param of=/sdcard/bootlogo_backup/param.bin bs=4096
-        fi
-        
-        ui_print " - patching warnings"
-        cp -r logo.jpg svb_orange.jpg
-        cp -r /tmp/hades/1px.jpg booting_warning.jpg
-        chown root:root * && chmod 444 *.jpg && touch *
-        
-        ui_print " - packing new bootlogo"
-        $tr -pcvf ../new_param.tar *
-        
-        ui_print " - flashing new bootlogo"
-        cat ../new_param.tar > $param
-        
-    else
-        ui_print " - no warning found, skipping param.."
-    fi
+    ui_print " - checking device compatibility"
+    check_supported_device
+    sleep 0.5
+
+    ui_print " - processing up_param"
+    process_bootlogo "up_param" "up_param.bin"
+    sleep 0.5
+
+    ui_print " - processing param"
+    process_bootlogo "param" "param.bin"
+    sleep 0.5
 
     ui_print " "
     ui_print "Done, reboot and enjoy!"
     ui_print " "
+    sleep 0.5
     sync
-else
-    ui_print " "
-    ui_print "!! Device is not supported, aborting..."
-    ui_print " "
-    exit 1
-fi
+
+    debug_log "Debug: Script completed"
+}
+
+main "$@"

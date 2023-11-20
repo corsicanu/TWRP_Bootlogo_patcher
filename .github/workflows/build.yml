@@ -5,12 +5,12 @@ on:
 
 jobs:
   update:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
         with:
           fetch-depth: 0
 
@@ -43,7 +43,7 @@ jobs:
           github_token: ${{ secrets.TOKEN }}
 
       - name: Upload release assets
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:

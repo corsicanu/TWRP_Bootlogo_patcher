@@ -1,7 +1,7 @@
 # Bootlogo Warnings Patcher
 ### A simple tool to get rid of [annoying boot warnings](https://imgur.com/a/FFeOHkC) - exynos only
 ```
-Copyright 2020-2022 © corsicanu
+Copyright 2017-2024 © corsicanu
 Licensed under CC BY-NC-SA 4.0
 https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
 ```
@@ -11,9 +11,10 @@ I am not responsable for anything you do with your device, don't blame me or any
 involved in this for your failures, you are the only one choosing to mess up with your device. 
 ```
 ### Supported devices
+   - Any device that returns exynos/universal from bootloader (probably all exynoses out there)
    - Galaxy S22 Series - S901B S906B S908B
    - Galaxy S21 Series - G991B G996B G998B G991N G996N G998N
-   - Galaxy S20 Series - G980F G985F G981B G986B G988B
+   - Galaxy S20 Series - G980F G985F G981B G986B G988B G780F
    - Galaxy S10 Series - G970F G973F G975F G977B G970N G973N G975N G977N
    - Galaxy Note 20 Series - N980F N981B N985F N986B
    - Galaxy Note 10 Series - N970F N975F N976B N971N N976N
@@ -25,7 +26,7 @@ involved in this for your failures, you are the only one choosing to mess up wit
    - Galaxy A13 - A135F A136B
 
 ### Instructions:
-   - Download TWRP_Bootlogo_patcher-*.zip from [releases](https://github.com/corsicanu/TWRP_Bootlogo_patcher/releases)
+   - Download latest TWRP_Bootlogo_patcher-*.zip from [releases](https://github.com/corsicanu/TWRP_Bootlogo_patcher/releases)
    - Boot phone in TWRP
    - Flash the downloaded zip as any other
    - Reboot and enjoy
@@ -36,22 +37,14 @@ involved in this for your failures, you are the only one choosing to mess up wit
    - Any graphical glitch regarding the bootlogo, or any other exotic issue, will be fixed by reflashing bootloader of the specific software version you are running, however, in case you encounter any of those try to submit an [issue](https://github.com/corsicanu/TWRP_Bootlogo_patcher/issues) in which i'll try to assist in fixing
 
 ### Patch steps (for nerds):
-   - get the device bootloader version from cmdline
-   - if the bootloader version matches device list - proceed to patch
-   - unpack tools and prepare folders
-   - find up_param and param blocks and set them as variables
-   - check up_param for [booting_warning.jpg](https://i.imgur.com/PMDv38E.jpeg)
-       - if booting_warning.jpg exists and its size is different than 305 bytes then it means it's not patched
-       - backup up_param to internal storage
-       - copy normal splash logo over [svb_orange.jpg](https://i.imgur.com/bQ9wTeW.jpeg)
-       - copy black 1px.jpg over booting_warning.jpg (which makes the size of the file 305 bytes)
-       - repack up_param and flash back
-   - check param for [booting_warning.jpg](https://i.imgur.com/PMDv38E.jpeg)
-       - if booting_warning.jpg exists and its size is different than 305 bytes then it means it's not patched
-       - backup param to internal storage
-       - copy normal splash logo over [svb_orange.jpg](https://i.imgur.com/bQ9wTeW.jpeg)
-       - copy black 1px.jpg over booting_warning.jpg (which makes the size of the file 305 bytes)
-       - repack param and flash back
+   - Compatibility Check:
+       - Checks if the device is supported based on either the presence of "exynos" or "universal" in the command line or a regex match against a list of supported devices.
+   - Tool Preparation:
+       - Sets up the necessary tools by cleaning up the temporary directory, creating subdirectories for up_param and param, unzipping the provided ZIP file, and adjusting permissions.
+   - up_param Bootlogo Processing:
+       - Unpacks the contents of up_param from the device, checks for the existence of a specific warning image, creates a backup of the stock up_param, patches warning images, creates a new tar file, and flashes the new tar file to up_param.
+   - param Bootlogo Processing:
+       - Unpacks the contents of param from the device, checks for the existence of a specific warning image, creates a backup of the stock param, patches warning images, creates a new tar file, and flashes the new tar file to param.
 
 After these phone will show the logo, a warning containing the normal splash logo and a normal logo with 1px black warning overlay, which will make it look as normal and unrooted/locked bootloader. 
 
